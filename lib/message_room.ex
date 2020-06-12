@@ -64,7 +64,7 @@ defmodule MessageServer do
 		# Key is a sender. Not sure if useing username or person object.
 		# Not sure just yet if sent to every member of the group or to a specific member.
 		new_messageboard = MessageBoard.add_message(state, key, value)
-		{:noreplay, new_messageboard}
+		{:noreply, new_messageboard}
 		# returns {:noreply, new_state}
 	end
 
@@ -91,6 +91,31 @@ defmodule MessageServer do
 
 	# Tests server architecture ------------------------------------------------
 	# Testing the interface should implicitly test the callbacks.
+
+	def test_server_interfaces() do
+		add_space = fn  -> IO.puts("--------------------") end
+		{:ok, server_pid} = start()
+		IO.inspect(server_pid)
+		add_space.()
+
+		members = get(server_pid, :members)
+		IO.inspect(members)
+
+		put(server_pid, "Eliot", "Hello!")
+		add_space.()
+		messages = get(server_pid, "Eliot")
+		IO.inspect(messages)
+
+		put(server_pid, "Selena", "HI!")
+		add_space.()
+		messages = get(server_pid, "Eliot")
+		IO.inspect(messages)
+
+		put(server_pid, "Eliot", "Side note, I'm going COVID crazy.")
+		add_space.()
+		messages = get(server_pid, "Eliot")
+		IO.inspect(messages)
+	end
 
 
 end # Module end
