@@ -259,4 +259,4 @@ defmodule Socialnetwork.Group do
 		end
 	end
 
-end  # Modul end
+end  # Module end
