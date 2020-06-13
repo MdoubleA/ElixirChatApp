@@ -3,7 +3,7 @@ defmodule TestGroupModule do
 	alias Socialnetwork.Group, as: Group
 	alias Socialnetwork.Person, as: Person
 
-	test "Group Module" do
+	test "Test: Group Module" do
 		uniquename = "Eliot"
 		name = "Eliot Glazer"
 		birthdate = "1983-07-12"

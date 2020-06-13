@@ -1,6 +1,5 @@
 defmodule Socialnetwork.GroupServer do
 	use GenServer
-	alias __MODULE__
 	alias Socialnetwork.Group, as: Group
 	alias Socialnetwork.Person, as: Person
 
@@ -9,25 +8,29 @@ defmodule Socialnetwork.GroupServer do
 		GenServer.start(__MODULE__, nil)
 	end
 
-	def add_member(uniquename, name, birthdate, interests) do
+	def add_member(pid, uniquename, name, birthdate, interests) do
 		person = Person.new(uniquename, name, birthdate, interests)
-		GenServer.cast(GroupServer, {:put, {:add, :member}, person)
+		GenServer.cast(pid, {:put, {:add, :member}, person})
 	end
 
-	def add_name(group_name) do
-		GenServer.cast(GroupServer, {:put, {:add, :name}, group_name})
+	def add_name(pid, group_name) do
+		GenServer.cast(pid, {:put, {:add, :name}, group_name})
 	end
 
-	def del_member(uniquename) do
-		GenServer.cast(GroupServer, {:put, {:delete, :member}})
+	def del_member(pid, uniquename) do
+		GenServer.cast(pid, {:put, {:delete, :member}, uniquename})
 	end
 
-	def get_member(uniquename) do
-		GenServer.call(GroupServer, {:member, uniquename})
+	def get_member(pid, uniquename) do
+		GenServer.call(pid, {:get, {:member, uniquename}})
 	end
 
-	def from_file!(path) do
-		GenServer.call(GroupServer, {:from_file, path})
+	def get_group(pid) do
+		GenServer.call(pid, {:get, :self})
+	end
+
+	def from_file!(pid, path) do
+		GenServer.call(pid, {:get, {:from_file, path}})
 	end
 
 	# Callbacks ----------------------------------------------------------------
@@ -44,11 +47,14 @@ defmodule Socialnetwork.GroupServer do
 
 			{:from_file, path} ->
 				Group.from_file!(path)
+
+			:self -> group
 		end
 
 		{:reply, response, group}
 	end
 
+	# Data is polymorphic data since the return is polymorphic.
 	def handle_cast({:put, key, data}, group) do
 		new_group = case key do
 			# Keys from the map must be atoms, as only atoms are allowed in struct definition.

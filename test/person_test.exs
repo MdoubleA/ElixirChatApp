@@ -2,7 +2,7 @@ defmodule TestPersonModule do
 	use ExUnit.Case
 	alias Socialnetwork.Person, as: Person
 
-	test "Person Module" do
+	test "Test: Person Module" do
 		uniquename = "Eliot"
 		name = "Eliot Glazer"
 		birthdate = "1983-07-12"
