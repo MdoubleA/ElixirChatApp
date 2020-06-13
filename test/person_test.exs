@@ -26,6 +26,6 @@ defmodule TestPersonModule do
 		assert eliot1 != eliot2
 		assert Person.equal?(eliot1, eliot2) == false
 		assert String.Chars.to_string(eliot1) == "#Person<uniquename: Eliot>"
-		IO.inspect(eliot2)
+		#IO.inspect(eliot2)
 	end
 end  # End TestPersonModule
