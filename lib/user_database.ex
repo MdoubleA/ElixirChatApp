@@ -4,8 +4,7 @@ defmodule Socialnetwork.UserDatabase do
 
 	# Process interface --------------------------------------------------------
 	def start do
-		GenServer.start(__MODULE__, nil)
-		name: __MODULE__
+		GenServer.start(__MODULE__, nil, name: __MODULE__)
 	end
 
 	def store(key, data) do

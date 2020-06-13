@@ -44,9 +44,7 @@ defmodule Socialnetwork.Group do
 
 	def from_file!(path) do
 		fields_ls_to_person = fn [uniquename, name, birthdate, interest1, interest2, interest3] ->
-			Socialnetwork.Person.new(uniquename, name, birthdate, interest1)
-			|> Socialnetwork.Person.add_field(:interests, interest2)
-			|> Socialnetwork.Person.add_field(:interests, interest3)
+			Socialnetwork.Person.new(uniquename, name, birthdate, [interest1, interest2, interest3])
 		end
 		File.stream!(path)
 		|> Stream.map(&String.replace(&1,"\n", ""))

@@ -21,6 +21,17 @@ defmodule Socialnetwork.Person do
 		%Person{uniquename: person.uniquename, name: person.name, birthdate: person.birthdate, interests: person.interests}
 	end
 
+	# not tesed yet.
+	# not used yet but may be needed.
+	def raw_to_person(data) do
+		person = Enum.each(data, fn x ->
+			key = Enum.elem(x, 0) |> String.to_existing_atom()
+			value = Enum.elem(x, 1)
+			{key, value}
+		end)
+		new(person.uniquename, person.name, person.birthdate, person.interests)
+	end
+
 	defp to_date(date) do
 		[year, month, day] = String.split(date, "-")
 		case Date.new(String.to_integer(year), String.to_integer(month), String.to_integer(day)) do
@@ -49,7 +60,7 @@ defmodule Socialnetwork.Person do
 					person,
 					:interests,
 					value,
-					fn curr_interests -> [value | curr_interests] end
+					fn curr_interests -> List.flatten([value | curr_interests], []) end
 					)
 		end
 	end
