@@ -19,16 +19,6 @@ defmodule Socialnetwork.Group do
 		end
 	end
 
-	def update_member(a_group = %Group{}, a_person = %Socialnetwork.Person{}) do
-		case Map.fetch(a_group.people, a_person.uniquename) do
-			{:ok, orig_person} ->
-				new_person = Socialnetwork.Person.new(orig_person)
-				%Group{a_group | people: Map.put(a_group.people, new_person.uniquename, new_person)}
-
-			:error -> a_group
-		end
-	end
-
 	# Key is the proper atom but as a string.
 	def update_member(a_group, uniquename, key, value) do
 		field = String.to_existing_atom(key)
