@@ -27,7 +27,7 @@ defmodule Socialnetwork.MessageBoard do
 	end
 
 	# Delete -------------------------------------------------------------------
-	def remove_person(message_board, username) do
+	def remove_member(message_board, username) do
 		new_members = Group.del_member(message_board.members, username)
 		new_messages = Enum.filter(message_board.messages, fn x -> Kernel.elem(x, 0) != username end)
 		%MessageBoard{message_board| messages: new_messages, members: new_members}
@@ -57,6 +57,10 @@ defmodule Socialnetwork.MessageServer do
 						# I want MessageBoard to be dependent on username and Group module to access data.
 						{:member, {username, group}} ->
 							Board.add_member(message_board, username, group)
+
+						# remove_member
+						{:remove, username} ->
+							Board.remove_member(message_board, username)
 					end
 		{:noreply, new_board}
 		# returns {:noreply, new_state}
@@ -81,12 +85,91 @@ defmodule Socialnetwork.MessageServer do
 	# Asynchornious calls.
 	def add_message(pid, username, message), do: GenServer.cast(pid, {:put, :message, {username, message}})
 	def add_member(pid, username, group), do: GenServer.cast(pid, {:put, :member, {username, group}})
+	def remove_member(pid, username), do: GenServer.cast(pid, {:put, :remove, username})
 
 	# Synchronious calls.
 	def get_members(pid), do: GenServer.call(pid, {:get, :members})
 	def get_messages(pid, username), do: GenServer.call(pid, {:get, {:messages, username}})
 end  # End MessageServer
 
-defmodule
+# Test MessageServer the interface to MessageBoard.
+defmodule TestMessageServer do
+	alias Socialnetwork.Group, as: Group
+	alias Socialnetwork.MessageServer, as: Server
 
-end
+	defp test_creation() do
+		some_users = Group.from_file!("C:\\Users\\Michael\\ElixirProjects\\socialnetwork\\lib\\SomePeople.txt")
+		Server.start({0, some_users})
+	end
+
+	defp test_get_member() do
+		some_users = Group.from_file!("C:\\Users\\Michael\\ElixirProjects\\socialnetwork\\lib\\SomePeople.txt")
+		{:ok, server_pid} = Server.start({0, some_users})
+
+		board = Server.get_members(server_pid)
+		IO.inspect(board)
+		IO.puts("---------------------------------------------\n")
+		{:ok, 1}
+	end
+
+	defp test_get_messages() do
+		some_users = Group.from_file!("C:\\Users\\Michael\\ElixirProjects\\socialnetwork\\lib\\SomePeople.txt")
+		{:ok, server_pid} = Server.start({0, some_users})
+
+		messages = Server.get_messages(server_pid, "Eliot")
+		IO.inspect(messages)
+		IO.puts("---------------------------------------------\n")
+		{:ok, 1}
+	end
+
+	defp test_add_message() do
+		some_users = Group.from_file!("C:\\Users\\Michael\\ElixirProjects\\socialnetwork\\lib\\SomePeople.txt")
+		{:ok, server_pid} = Server.start({0, some_users})
+
+		Server.add_message(server_pid, "Eliot", "Hello! I'm Eliot Glazer.")
+		messages = Server.get_messages(server_pid, "Eliot")
+		IO.inspect(messages)
+		IO.puts("---------------------------------------------\n")
+		{:ok, 1}
+	end
+
+	defp test_add_member() do
+		all_users = Group.from_file!("C:\\Users\\Michael\\ElixirProjects\\socialnetwork\\lib\\MakePeople.txt")
+		some_users = Group.from_file!("C:\\Users\\Michael\\ElixirProjects\\socialnetwork\\lib\\SomePeople.txt")
+		{:ok, server_pid} = Server.start({0, some_users})
+
+		Server.add_member(server_pid, "Elon", all_users)
+		members = Server.get_members(server_pid)
+		IO.inspect(members)
+		IO.puts("---------------------------------------------\n")
+		{:ok, 1}
+	end
+
+	defp test_remove_member() do
+		some_users = Group.from_file!("C:\\Users\\Michael\\ElixirProjects\\socialnetwork\\lib\\SomePeople.txt")
+		{:ok, server_pid} = Server.start({0, some_users})
+
+		Server.add_message(server_pid, "Eliot", "Hello! I'm Eliot Glazer.")
+		Server.remove_member(server_pid, "Eliot")
+		members = Server.get_members(server_pid)
+		messages = Server.get_messages(server_pid, "Eliot")
+		IO.inspect(members)
+		IO.inspect(messages)
+		IO.puts("---------------------------------------------\n")
+		{:ok, 1}
+	end
+
+	def run_tests() do
+		with {:ok, _} <- test_creation(),
+		     {:ok, _} <- test_get_member(),
+			 {:ok, _} <- test_get_messages(),
+			 {:ok, _} <- test_add_message(),
+			 {:ok, _} <- test_add_member(),
+			 {:ok, _} <- test_remove_member() do
+		  IO.inspect({:ok, "Message Server: All systems go."})
+		  :test_end
+		end
+	end
+
+
+end  # End TestMessageServer
