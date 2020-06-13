@@ -1,4 +1,8 @@
 defmodule Socialnetwork.MessageBoard do
+	# Three points of contact, let new functionality = x:
+	# 1. Add x to MessageBoard.
+	# 2. Add x to MessageServer callbacks.
+	# 3. Add x to MessageServer interface.
 	alias __MODULE__
 	alias Socialnetwork.Group, as: Group
 	defstruct id: nil, messages: [], members: Group.new()
@@ -9,6 +13,8 @@ defmodule Socialnetwork.MessageBoard do
 	def new(id, %Group{} = group) do
 		%MessageBoard{id: id, members: group}
 	end
+
+	def new(id), do: %MessageBoard{id: id}  # Not formally tested.
 
 	# Read ---------------------------------------------------------------------
 	def get_sent_messages(message_board, username) do
@@ -45,6 +51,7 @@ defmodule Socialnetwork.MessageServer do
 	#---------------------------------------------------------------------------
 	# The parameter to init is the second parameter to GenServer.start(MessageServer, x)
 	def init({id, %Group{} = group}), do: {:ok, Board.new(id, group)}
+	def init({id}), do: {:ok, Board.new(id)}
 
 	def handle_cast({:put, key, value}, message_board) do
 		new_board = case {key, value} do
@@ -81,6 +88,7 @@ defmodule Socialnetwork.MessageServer do
 	#---------------------------------------------------------------------------
 	# GenServer.start is a synchronious call and timesout after 5 seconds. A third parameter is in milliseconds to specify timeout.
 	def start({_id, %Group{}} = x), do: GenServer.start(MessageServer, x)  # returns {:ok, #PID<x.x.x>}
+	def start({_id} = x), do: GenServer.start(MessageServer, x)
 
 	# Asynchornious calls.
 	def add_message(pid, username, message), do: GenServer.cast(pid, {:put, :message, {username, message}})
