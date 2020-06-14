@@ -56,8 +56,8 @@ defmodule Socialnetwork.MessageServer do
 		{:ok, nil}
 	end
 
-	def handle_info(:real_init, data) do
-		Board.new(data)
+	def handle_info({:real_init, data}, _) do
+		{:noreply, Board.new(data)}
 	end
 
 	def handle_cast({:put, key, value}, message_board) do
@@ -72,7 +72,7 @@ defmodule Socialnetwork.MessageServer do
 						{:member, {username, group}} ->
 							Board.add_member(message_board, username, group)
 
-						# remove_member
+						# remove_member, returns :ok
 						{:remove, username} ->
 							Board.remove_member(message_board, username)
 					end
@@ -83,8 +83,8 @@ defmodule Socialnetwork.MessageServer do
 	def handle_call({:get, key}, _, message_board) do
 		response =
 			case key do
-				:members -> {:members, message_board.members}
-				{:messages, username} -> {:messages, Board.get_sent_messages(message_board, username)}
+				:members -> message_board.members
+				{:messages, username} -> Board.get_sent_messages(message_board, username)
 			end
 		{:reply, response, message_board}
 	end
@@ -106,74 +106,3 @@ defmodule Socialnetwork.MessageServer do
 	def get_members(pid), do: GenServer.call(pid, {:get, :members})
 	def get_messages(pid, username), do: GenServer.call(pid, {:get, {:messages, username}})
 end  # End MessageServer
-
-
-# Test MessageServer the interface to MessageBoard.
-defmodule TestMessageServer do
-	alias Socialnetwork.Group, as: Group
-	alias Socialnetwork.MessageServer, as: Server
-
-	defp test_creation() do
-		some_users = Group.from_file!(".\\lib\\SomePeople.txt")
-		Server.start({0, some_users})
-	end
-
-	defp test_get_member(server_pid) do
-		board = Server.get_members(server_pid)
-		IO.inspect(board)
-		IO.puts("---------------------------------------------\n")
-		{:ok, 1}
-	end
-
-	defp test_get_messages(server_pid) do
-		messages = Server.get_messages(server_pid, "Eliot")
-		IO.inspect(messages)
-		IO.puts("---------------------------------------------\n")
-		{:ok, 1}
-	end
-
-	defp test_add_message(server_pid) do
-		Server.add_message(server_pid, "Eliot", "Hello! I'm Eliot Glazer.")
-		messages = Server.get_messages(server_pid, "Eliot")
-		IO.inspect(messages)
-		IO.puts("---------------------------------------------\n")
-		{:ok, 1}
-	end
-
-	defp test_add_member(server_pid) do
-		all_users = Group.from_file!(".\\lib\\MakePeople.txt")
-
-		Server.add_member(server_pid, "Elon", all_users)
-		Server.add_message(server_pid, "Elon", "Nice to meet you! I'm Elon.")
-		members = Server.get_members(server_pid)
-		IO.inspect(members)
-		IO.puts("---------------------------------------------\n")
-		{:ok, 1}
-	end
-
-	defp test_remove_member(server_pid) do
-		Server.remove_member(server_pid, "Eliot")
-		members = Server.get_members(server_pid)
-		messages = Server.get_messages(server_pid, "Eliot")
-		IO.inspect(members)
-		IO.inspect(messages)
-		messages = Server.get_messages(server_pid, "Elon")
-		IO.inspect(messages)
-		IO.puts("---------------------------------------------\n")
-		{:ok, 1}
-	end
-
-	def run_tests() do
-		with {:ok, server_pid} <- test_creation(),
-		     {:ok, _} <- test_get_member(server_pid),
-			 {:ok, _} <- test_get_messages(server_pid),
-			 {:ok, _} <- test_add_message(server_pid),
-			 {:ok, _} <- test_add_member(server_pid),
-			 {:ok, _} <- test_remove_member(server_pid) do
-		  IO.inspect({:ok, "Message Server: All systems go."})
-		  :test_end
-		end
-	end
-
-
-end  # End TestMessageServer
