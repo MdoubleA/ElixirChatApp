@@ -51,7 +51,14 @@ defmodule Socialnetwork.MessageServer do
 	#---------------------------------------------------------------------------
 	# The parameter to init is the second parameter to GenServer.start(MessageServer, x)
 	def init({id, %Group{} = group}), do: {:ok, Board.new(id, group)}
-	def init({id}), do: {:ok, Board.new(id)}
+	def init(id) do
+		send(self(), {:real_init, id})
+		{:ok, nil}
+	end
+
+	def handle_info(:real_init, data) do
+		Board.new(data)
+	end
 
 	def handle_cast({:put, key, value}, message_board) do
 		new_board = case {key, value} do
@@ -88,7 +95,7 @@ defmodule Socialnetwork.MessageServer do
 	#---------------------------------------------------------------------------
 	# GenServer.start is a synchronious call and timesout after 5 seconds. A third parameter is in milliseconds to specify timeout.
 	def start({_id, %Group{}} = x), do: GenServer.start(MessageServer, x)  # returns {:ok, #PID<x.x.x>}
-	def start({_id} = x), do: GenServer.start(MessageServer, x)
+	def start(id), do: GenServer.start(MessageServer, id)
 
 	# Asynchornious calls.
 	def add_message(pid, username, message), do: GenServer.cast(pid, {:put, :message, {username, message}})

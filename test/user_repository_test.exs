@@ -8,7 +8,7 @@ defmodule TestUserRepository do
 	# Make sure to delete database file associated with groupname before starting test.
 	# i.e. .\persist\"groupname".
 
-	test "Test: User Repository" do
+	test "User Repository" do
 		groupname = "UserRepository"
 
 		# Test initialization creates properly formatted "blank slate."
@@ -55,7 +55,6 @@ defmodule TestUserRepository do
 		Enum.each(main_repository, add_more_members)
 
 		# Visually inspect the data.
-		new_group = Repository.get_group(server_pid)
-		#IO.inspect(new_group)
+		#IO.inspect(Repository.get_group(server_pid))
 	end
 end  # End Test Group Server
