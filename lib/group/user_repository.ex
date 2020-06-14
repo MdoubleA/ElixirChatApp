@@ -119,4 +119,4 @@ defmodule Socialnetwork.UserRepository do
 		{:noreply, new_group}
 	end
 
-end  # End GroupServer.
+end  # End UserRepository.
