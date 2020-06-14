@@ -34,6 +34,6 @@ defmodule TestPersonModule do
 
 		# Test out implementation of the String.Chars protocol and visually inspect data format.
 		assert String.Chars.to_string(eliot1) == "#Person<uniquename: Eliot>"
-		IO.inspect(eliot2)
+		#IO.inspect(eliot2)
 	end
 end  # End TestPersonModule

@@ -50,7 +50,7 @@ defmodule TestGroupServer do
 
 		# Visually inspect the well defined data in test file SomePeople.txt.
 		# Unique names are Selena and Eliot.
-		path = "C:\\Users\\Michael\\ElixirProjects\\socialnetwork\\lib\\SomePeople.txt"
+		path = ".\\lib\\SomePeople.txt"
 		Server.from_file!(server_pid, path)
 	end
 end  # End Test Group Server

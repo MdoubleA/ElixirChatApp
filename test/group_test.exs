@@ -36,8 +36,8 @@ defmodule TestGroupModule do
 		assert Group.del_member(group, uniquename) == %Group{group_name: "TheCrew", num_people: 0, people: %{}}
 
 		# Visually validate data format.
-		test_group = Group.from_file!("C:\\Users\\Michael\\ElixirProjects\\socialnetwork\\lib\\SomePeople.txt")
-		IO.inspect(test_group)
+		test_group = Group.from_file!(".\\lib\\SomePeople.txt")
+		#IO.inspect(test_group)
 
 		# Test Enumerable protocol was properly implemented
 		# Test that we can turn a list [{uniquename, person}] back to a group.

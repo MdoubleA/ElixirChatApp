@@ -107,7 +107,7 @@ defmodule TestMessageServer do
 	alias Socialnetwork.MessageServer, as: Server
 
 	defp test_creation() do
-		some_users = Group.from_file!("C:\\Users\\Michael\\ElixirProjects\\socialnetwork\\lib\\SomePeople.txt")
+		some_users = Group.from_file!(".\\lib\\SomePeople.txt")
 		Server.start({0, some_users})
 	end
 
@@ -134,7 +134,7 @@ defmodule TestMessageServer do
 	end
 
 	defp test_add_member(server_pid) do
-		all_users = Group.from_file!("C:\\Users\\Michael\\ElixirProjects\\socialnetwork\\lib\\MakePeople.txt")
+		all_users = Group.from_file!(".\\lib\\MakePeople.txt")
 
 		Server.add_member(server_pid, "Elon", all_users)
 		Server.add_message(server_pid, "Elon", "Nice to meet you! I'm Elon.")
