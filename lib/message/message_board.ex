@@ -58,7 +58,11 @@ defmodule Socialnetwork.MessageServer do
 	# Well let's find out.
 	#---------------------------------------------------------------------------
 	# init/2 is not refactored yet!
-	def init({id, %Group{} = group}), do: {:ok, Board.new(id, group)}
+	def init({id, %Group{} = group}) do
+		#Db.start() Will end up pushing this up the system hierarchy.
+		{:ok, Board.new(id, group)}
+	 end
+
 	def init(id) do
 		# I want the message_board to have to wait on the server.
 		# Should not hold up the database cause it uses workers.
