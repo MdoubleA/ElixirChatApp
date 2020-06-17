@@ -4,7 +4,9 @@ defmodule Socialnetwork.MessageDatabase.Worker do
 
 	# Process interface --------------------------------------------------------
 	def start(db_folder) do
+		#IO.inspect(__MODULE__)
 		GenServer.start(__MODULE__, db_folder)
+		#{:ok, pid}
 	end
 
 	def store(pid, key, data) do
@@ -18,12 +20,12 @@ defmodule Socialnetwork.MessageDatabase.Worker do
 	# Process callbacks --------------------------------------------------------
 	def init(db_folder) do
 		File.mkdir_p!(db_folder)
-		{:ok, nil}
+		{:ok, db_folder}
 	end
 
 	def handle_cast({:store, key, data}, db_folder) do
-		key
-		|> file_name(db_folder)
+		db_folder
+		|> file_name(key)
 		|> File.write!(:erlang.term_to_binary(data))
 
 		{:noreply, db_folder}

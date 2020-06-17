@@ -97,6 +97,7 @@ defmodule Socialnetwork.MessageServer do
 			case key do
 				:members -> message_board.members
 				{:messages, username} -> Board.get_sent_messages(message_board, username)
+				:all -> message_board
 			end
 		{:reply, response, message_board}
 	end
@@ -117,4 +118,5 @@ defmodule Socialnetwork.MessageServer do
 	# Synchronious calls.
 	def get_members(pid), do: GenServer.call(pid, {:get, :members})
 	def get_messages(pid, username), do: GenServer.call(pid, {:get, {:messages, username}})
+	def get_board(pid), do: GenServer.call(pid, {:get, :all})
 end  # End MessageServer

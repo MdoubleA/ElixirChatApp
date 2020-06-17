@@ -25,8 +25,8 @@ defmodule Socialnetwork.Person do
 	# not used yet but may be needed.
 	def raw_to_person(data) do
 		person = Enum.each(data, fn x ->
-			key = Enum.elem(x, 0) |> String.to_existing_atom()
-			value = Enum.elem(x, 1)
+			key = Kernel.elem(x, 0) |> String.to_existing_atom()
+			value = Kernel.elem(x, 1)
 			{key, value}
 		end)
 		new(person.uniquename, person.name, person.birthdate, person.interests)

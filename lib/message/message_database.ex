@@ -5,34 +5,32 @@ defmodule Socialnetwork.MessageDatabase do
 
 	# Interface, these are called in the client process.
 	def start do
-		{:ok, pid} = GenServer.start(__MODULE__, nil, name: __MODULE__)
-		IO.inspect(pid)
+		GenServer.start(__MODULE__, nil, name: __MODULE__)
 	end
 
 	def store(key, data) do
 		# Enter DB process              |> Enter worker process
-		GenServer.call(__MODULE__, key) |> Worker.store(key, data)
+		GenServer.call(__MODULE__, {:get, key}) |> Worker.store(key, data)
 	end
 
 	def get(key) do
-		GenServer.call(__MODULE__, key) |> Worker.get(key)
+		GenServer.call(__MODULE__, {:get, key}) |> Worker.get(key)
 	end
 
 	# Process callbacks --------------------------------------------------------
 	def init(_) do
-		workers =
-			0..2
-			|> Enum.each(fn id ->
-					{:ok, pid} = Worker.start(@db_folder)
-					{id, pid}
-				end)
+		workers = 0..2
+			|> Enum.map(fn id ->
+		 			{:ok, pid} = Worker.start(@db_folder)
+		 			{id, pid}
+		 		end)
 			|> Enum.into(%{})
 
 		{:ok, workers}
 	end
 
 	def handle_call({:get, key}, _, workers) do
-		worker_pid = :erlang.phash(key, Enum.count(workers))
-		{:reply, worker_pid, workers}
+		worker_key = :erlang.phash2(key, Enum.count(workers))
+		{:reply, Map.get(workers, worker_key), workers}
 	end
 end  # End UserDatabase Module
