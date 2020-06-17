@@ -51,7 +51,7 @@ defmodule Socialnetwork.MessageServer do
 	alias __MODULE__
 	alias Socialnetwork.Group, as: Group
 	alias Socialnetwork.MessageBoard, as: Board
-	#alias Socialnetwork.MessageDatabase, as: Db
+	alias Socialnetwork.MessageDatabase, as: Db
 	use GenServer
 
 	# GenServer callbacks.
@@ -68,7 +68,15 @@ defmodule Socialnetwork.MessageServer do
 		# 	nil -> Board.new(id)
 		# end
 		# {:ok, new_board}
-		{:ok, Board.new(id)}
+
+		#{:ok, Board.new(id)}
+		Db.start()
+		new_board = case Db.get(id) do
+			nil -> Board.new(id)
+			board -> board
+		end
+
+		{:ok, new_board}
 	end
 
 	def handle_cast({:put, key, value}, message_board) do
@@ -88,6 +96,7 @@ defmodule Socialnetwork.MessageServer do
 							Board.remove_member(message_board, username)
 					end
 
+		Db.store(new_board.id, new_board)
 		{:noreply, new_board}
 		# returns {:noreply, new_state}
 	end

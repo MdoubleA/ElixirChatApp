@@ -2,6 +2,7 @@ defmodule TestMessageServer do
 	use ExUnit.Case
 	alias Socialnetwork.Group, as: Group
 	alias Socialnetwork.MessageServer, as: Server
+	alias Socialnetwork.MessageDatabase, as: Db
 
 
 	# A message board IS a server, but I separeted the board logic and server process
@@ -43,5 +44,7 @@ defmodule TestMessageServer do
 
 		Server.remove_member(pid1, "Eliot")
 		assert [] == Server.get_messages(pid1, "Eliot")
+
+		Process.exit(Process.whereis(Db), :kill)
 	end # End test
 end # End TestMessageServer

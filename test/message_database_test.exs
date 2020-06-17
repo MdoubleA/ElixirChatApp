@@ -30,5 +30,7 @@ defmodule TestMessageDatabase do
 		# IO.inspect(old_board)
 		# IO.puts("______________________________________")
 		# IO.inspect(Db.get(id))
+
+		Process.exit(Process.whereis(Db), :kill)
 	end # End test
 end # End TestMessageDatabaseModule
