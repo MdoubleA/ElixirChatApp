@@ -10,7 +10,7 @@ defmodule TestUserRepository do
 
 	test "User Repository" do
 		groupname = "TestUserRepository"
-		File.rm(".\\persist\\"<>groupname)
+		File.rm(".\\persist\\Users\\"<>groupname)
 
 		# Test initialization creates properly formatted "blank slate."
 		{:ok, server_pid} = Repository.start(groupname)

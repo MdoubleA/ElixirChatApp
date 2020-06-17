@@ -1,29 +1,18 @@
 defmodule Socialnetwork.UserRepository do
 	use GenServer
 	alias Socialnetwork.Group, as: Group
-	alias Socialnetwork.Person, as: Person #  Our goal is to not need this here.
-	#alias Socialnetwork.UserDatabase, as: Db
-	# This calls UserDatabase, and UserDatabase stores data to file.
-	# I guess here we have a critical decision.
-	# 1. Either keep a copy of all users in memory and pass updates (writes) to database.
-	# 2. Or have all reads and writes go through the database, conducting numerous IO operations.
-	# I'll never have too large of a set of users.
-	# Doing 2. If change use a copy of group server to hold an in memory copy and
-	# perform db IO only on write. Will probably just use some 3rd party someting anyway.
-	# Here's another issue: Do I store the whole group in one file or
-	# One group, one file . . . on each and every read :(
-
-	# So this is a group server but with write to db capacity.
-	# So this is like out managment class that would, for example, see if a user exists, and if it does,
-	# Defere to some messaging component to handle that piece.
-
-	# This will span worker processes for reads, and
-	# pass writes to data base that will spawn work processes for the writes
-
+	alias Socialnetwork.Person, as: Person
+	@databasesource "UserRepository"
+	# In memory copy of database with additional data manipulation abilites.
 
 	# Interface ----------------------------------------------------------------
 	def start(group_name) do
 		GenServer.start(__MODULE__, group_name)
+	end
+
+	# This will be useful when a final persisting data set is found.
+	def start_main_repository() do
+		GenServer.start(__MODULE__, @databasesource)
 	end
 
 	def add_member(pid, uniquename, name, birthdate, interests) do

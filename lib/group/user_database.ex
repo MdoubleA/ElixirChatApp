@@ -1,6 +1,7 @@
 defmodule Socialnetwork.UserDatabase do
 	use GenServer
-	@db_folder ".\\persist"
+	@db_folder ".\\persist\\Users"
+	# This is the interface to the disk based database. Only does reads/writes.
 
 	# Process interface --------------------------------------------------------
 	def start do

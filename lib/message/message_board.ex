@@ -5,6 +5,10 @@ defmodule Socialnetwork.MessageBoard do
 	# 3. Add x to MessageServer interface.
 	alias __MODULE__
 	alias Socialnetwork.Group, as: Group
+
+	# Saving members to the database, and all of their metadata is wasteful since
+	# we have a user repository. We only need uernames.
+	# This change need much refactoring, so waiting to do that till later.
 	defstruct id: nil, messages: [], members: Group.new()
 
 	# Basic data manipulations.
@@ -41,23 +45,30 @@ defmodule Socialnetwork.MessageBoard do
 end # End MessageBoard
 
 
+# So the message server is connected to the database. So there is a dependency their.
+# Welp, I tested the two together so the test needs to be rewritten.
 defmodule Socialnetwork.MessageServer do
 	alias __MODULE__
 	alias Socialnetwork.Group, as: Group
 	alias Socialnetwork.MessageBoard, as: Board
+	#alias Socialnetwork.MessageDatabase, as: Db
 	use GenServer
 
 	# GenServer callbacks.
+	# Well let's find out.
 	#---------------------------------------------------------------------------
-	# The parameter to init is the second parameter to GenServer.start(MessageServer, x)
+	# init/2 is not refactored yet!
 	def init({id, %Group{} = group}), do: {:ok, Board.new(id, group)}
 	def init(id) do
-		send(self(), {:real_init, id})
-		{:ok, nil}
-	end
-
-	def handle_info({:real_init, data}, _) do
-		{:noreply, Board.new(data)}
+		# I want the message_board to have to wait on the server.
+		# Should not hold up the database cause it uses workers.
+		# Db.start()
+		# new_board = case Db.get(id) do
+		# 	{:ok, board} -> board
+		# 	nil -> Board.new(id)
+		# end
+		# {:ok, new_board}
+		{:ok, Board.new(id)}
 	end
 
 	def handle_cast({:put, key, value}, message_board) do
@@ -76,6 +87,7 @@ defmodule Socialnetwork.MessageServer do
 						{:remove, username} ->
 							Board.remove_member(message_board, username)
 					end
+
 		{:noreply, new_board}
 		# returns {:noreply, new_state}
 	end

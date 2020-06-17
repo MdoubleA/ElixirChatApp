@@ -1,7 +1,9 @@
 defmodule Socialnetwork.MessageBoardCache do
 	use GenServer
 	alias Socialnetwork.MessageServer, as: MessageServer
-	# The cash will have a manager of some sort
+	# The cash will have a manager of some sort to handle Mapping user names to
+	# unique ids. This is just a mapping of unique ids to pid's. If the system were
+	# to get big, this process is used to synchronize unique key managment.
 
 	# Call backs ---------------------------------------------------------------
 	def init(_) do
@@ -16,7 +18,7 @@ defmodule Socialnetwork.MessageBoardCache do
 
 			# If no association, make one.
 			:error ->
-				{:ok, pid} = Socialnetwork.MessageServer.start(board_name)
+				{:ok, pid} = MessageServer.start(board_name)
 				new_state = Map.put(message_boards, board_name, pid)
 				{pid, new_state}
 		end
