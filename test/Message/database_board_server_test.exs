@@ -7,9 +7,9 @@ defmodule DatabaseBoardServerIntegrationTest do
 	test "Database Board Server Integration" do
 		{:ok, sys_super} = Socialnetwork.MessageBoard.System.start_link()
 		id = "CoolTalk"
-		test_group = Group.from_file!(".\\lib\\SomePeople.txt")
+		test_group = Group.from_file!(".\\lib\\system\\SomePeople.txt")
 		{:ok, board_pid} = Server.start({id, test_group})
-		File.rm(".\\persist\\Messages\\"<>id)
+		File.rm(".\\test\\persist\\Messages\\"<>id)
 
 		# Test initial state of database. No data saved yet.
 		assert nil == Db.get(id)

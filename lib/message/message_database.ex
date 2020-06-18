@@ -1,5 +1,5 @@
 defmodule Socialnetwork.MessageDatabase do
-	@db_folder ".\\persist\\Messages"
+	@db_folder ".\\test\\persist\\Messages"
 	@pool_size 3
 	alias Socialnetwork.MessageDatabase.Worker, as: Worker
 

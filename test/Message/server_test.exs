@@ -10,9 +10,9 @@ defmodule TestMessageServer do
 		id1 = "TedTalk"
 		id2 = "BobTalk"
 		# Both the following clean up lines are need post integration.
-		File.rm(".\\persist\\Messages\\"<>id1)
-		File.rm(".\\persist\\Messages\\"<>id2)
-		test_group = Group.from_file!(".\\lib\\SomePeople.txt")
+		File.rm(".\\test\\persist\\Messages\\"<>id1)
+		File.rm(".\\test\\persist\\Messages\\"<>id2)
+		test_group = Group.from_file!(".\\lib\\system\\SomePeople.txt")
 
 		# Test distinct process creation.
 		{:ok, sys_super} = Socialnetwork.MessageBoard.System.start_link()
