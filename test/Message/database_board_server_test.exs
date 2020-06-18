@@ -5,7 +5,7 @@ defmodule DatabaseBoardServerIntegrationTest do
 	alias Socialnetwork.MessageDatabase, as: Db
 
 	test "Database Board Server Integration" do
-		{:ok, _sys_super} = Socialnetwork.MessageBoard.System.start_link()
+		{:ok, sys_super} = Socialnetwork.MessageBoard.System.start_link()
 		id = "CoolTalk"
 		test_group = Group.from_file!(".\\lib\\SomePeople.txt")
 		{:ok, board_pid} = Server.start({id, test_group})
@@ -29,6 +29,9 @@ defmodule DatabaseBoardServerIntegrationTest do
 		# # IO.inspect(Db.get(id))
 		#
 		# Process.exit(Process.whereis(Db), :kill)
+		# This clean up is need post integration.
+		Process.exit(sys_super, :normal)
+		Process.sleep(500)
 	end # End test
 
 	# defp get_board_pid(key) do
