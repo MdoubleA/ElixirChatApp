@@ -29,8 +29,8 @@ defmodule Socialnetwork.MessageBoardCache do
 
 	# Interface functions, Called in cliet process -------------
 	def start_link(_) do
-		IO.inspect(self())
-		IO.puts("Starting Message Cache.")
+		#IO.inspect(self())
+		#IO.puts("Starting Message Cache.")
 		GenServer.start_link(__MODULE__, nil, name: __MODULE__)
 	end
 

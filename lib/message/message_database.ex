@@ -1,42 +1,41 @@
 defmodule Socialnetwork.MessageDatabase do
-	use GenServer
 	@db_folder ".\\persist\\Messages"
+	@pool_size 3
 	alias Socialnetwork.MessageDatabase.Worker, as: Worker
 
 	# Interface, these are called in the client process.
-	def start_link(_) do
-		GenServer.start(__MODULE__, nil, name: __MODULE__)
+	def start_link do
+		File.mkdir_p!(@db_folder)
+		children = Enum.map(1..@pool_size, &worker_spec/1)
+		Supervisor.start_link(children, strategy: :one_for_one)
+	end
+
+	defp worker_spec(worker_id) do
+		default_worker_spec = {Worker, {@db_folder, worker_id}}
+		Supervisor.child_spec(default_worker_spec, id: worker_id)
+	end
+
+	def child_spec(_) do
+		%{
+			id: __MODULE__,
+			start: {__MODULE__, :start_link, []},
+			type: :supervisor  	# Allows MessageDatabase to be created as start_link/0
+								# since it is a supervisor.
+		}
 	end
 
 	# Used in the testing functions.
-	def start do
-		GenServer.start(__MODULE__, nil, name: __MODULE__)
+	# Used to dynamically get a pid for a given key (worker_id/key) since now pids can change.
+	defp choose_worker(key) do
+		:erlang.phash2(key, @pool_size) + 1 # +1 since not zero-indexing.
 	end
 
 	def store(key, data) do
 		# Enter DB process              |> Enter worker process
-		GenServer.call(__MODULE__, {:get, key}) |> Worker.store(key, data)
+		key |> choose_worker() |> Worker.store(key, data)
 	end
 
 	def get(key) do
-		GenServer.call(__MODULE__, {:get, key}) |> Worker.get(key)
+		key |> choose_worker() |> Worker.get(key)
 	end
-
-	# Process callbacks --------------------------------------------------------
-	# Need to optimize init to ensure it doesn't black any callers. See Chap 7.
-	def init(_) do
-		workers = 0..2
-			|> Enum.map(fn id ->
-		 			{:ok, pid} = Worker.start(@db_folder)
-		 			{id, pid}
-		 		end)
-			|> Enum.into(%{})
-
-		{:ok, workers}
-	end
-
-	def handle_call({:get, key}, _, workers) do
-		worker_key = :erlang.phash2(key, Enum.count(workers))
-		{:reply, Map.get(workers, worker_key), workers}
-	end
-end  # End UserDatabase Module
+end # End Socialnetwork.MessageDatabase
