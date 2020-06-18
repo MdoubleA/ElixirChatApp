@@ -1,9 +1,9 @@
-defmodule DatabaseRegistryIntegrationTest do
+defmodule DatabaseWorkerRegistryIntegrationTest do
 	use ExUnit.Case
 	alias Socialnetwork.ProcessRegistry, as: ProcReg
 	alias Socialnetwork.MessageDatabase.Worker, as: Worker
 
-	test "Database Registry Integration" do
+	test "Database Worker Registry Integration" do
 		# Test state initialization.
 		{:ok, sys_super} = Socialnetwork.MessageBoard.System.start_link()
 		[{worker_1, nil}] = Registry.lookup(ProcReg, {Worker, 1})
