@@ -13,6 +13,7 @@ defmodule TestMessageServer do
 		test_group = Group.from_file!(".\\lib\\SomePeople.txt")
 
 		# Test distinct process creation.
+		Db.start()
 		{:ok, pid1} = Server.start(id1)
 		{:ok, pid2} = Server.start({id2, test_group})
 		assert Kernel.is_pid(pid1)

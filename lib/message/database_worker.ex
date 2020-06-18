@@ -20,6 +20,8 @@ defmodule Socialnetwork.MessageDatabase.Worker do
 	# Process callbacks --------------------------------------------------------
 	def init(db_folder) do
 		File.mkdir_p!(db_folder)
+		IO.inspect(self())
+		IO.puts("Starting database worker.")
 		{:ok, db_folder}
 	end
 

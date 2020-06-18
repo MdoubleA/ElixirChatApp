@@ -54,9 +54,8 @@ defmodule Socialnetwork.MessageServer do
 	alias Socialnetwork.MessageDatabase, as: Db
 	use GenServer
 
-	# GenServer callbacks.
-	# Well let's find out.
-	#---------------------------------------------------------------------------
+	# Call backs, called in the server process. ----------------
+	#
 	# init/2 is not refactored yet!
 	def init({id, %Group{} = group}) do
 		#Db.start() Will end up pushing this up the system hierarchy.
@@ -74,7 +73,6 @@ defmodule Socialnetwork.MessageServer do
 		# {:ok, new_board}
 
 		#{:ok, Board.new(id)}
-		Db.start()
 		new_board = case Db.get(id) do
 			nil -> Board.new(id)
 			board -> board
@@ -117,8 +115,8 @@ defmodule Socialnetwork.MessageServer do
 
 	#terminate/2 will need to included at some point for data saving.
 
-	# Server Interfaces.
-	#---------------------------------------------------------------------------
+	# Server Interfaces, called in client process. ----------------
+	#
 	# GenServer.start is a synchronious call and timesout after 5 seconds. A third parameter is in milliseconds to specify timeout.
 	def start({_id, %Group{}} = x), do: GenServer.start(MessageServer, x)  # returns {:ok, #PID<x.x.x>}
 	def start(id), do: GenServer.start(MessageServer, id)
