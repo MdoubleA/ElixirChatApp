@@ -4,6 +4,11 @@ defmodule Socialnetwork.MessageDatabase do
 	alias Socialnetwork.MessageDatabase.Worker, as: Worker
 
 	# Interface, these are called in the client process.
+	def start_link(_) do
+		GenServer.start(__MODULE__, nil, name: __MODULE__)
+	end
+
+	# Used in the testing functions.
 	def start do
 		GenServer.start(__MODULE__, nil, name: __MODULE__)
 	end
@@ -18,6 +23,7 @@ defmodule Socialnetwork.MessageDatabase do
 	end
 
 	# Process callbacks --------------------------------------------------------
+	# Need to optimize init to ensure it doesn't black any callers. See Chap 7.
 	def init(_) do
 		workers = 0..2
 			|> Enum.map(fn id ->

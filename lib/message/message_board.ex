@@ -47,6 +47,7 @@ end # End MessageBoard
 
 # So the message server is connected to the database. So there is a dependency their.
 # Welp, I tested the two together so the test needs to be rewritten.
+# Supervisor Ensures Db is created.
 defmodule Socialnetwork.MessageServer do
 	alias __MODULE__
 	alias Socialnetwork.Group, as: Group
@@ -58,21 +59,10 @@ defmodule Socialnetwork.MessageServer do
 	#
 	# init/2 is not refactored yet!
 	def init({id, %Group{} = group}) do
-		#Db.start() Will end up pushing this up the system hierarchy.
 		{:ok, Board.new(id, group)}
 	 end
 
 	def init(id) do
-		# I want the message_board to have to wait on the server.
-		# Should not hold up the database cause it uses workers.
-		# Db.start()
-		# new_board = case Db.get(id) do
-		# 	{:ok, board} -> board
-		# 	nil -> Board.new(id)
-		# end
-		# {:ok, new_board}
-
-		#{:ok, Board.new(id)}
 		new_board = case Db.get(id) do
 			nil -> Board.new(id)
 			board -> board
