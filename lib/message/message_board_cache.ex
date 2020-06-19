@@ -4,7 +4,7 @@ defmodule Socialnetwork.MessageBoardCache do
 	# unique ids. This is just a mapping of unique ids to pid's. If the system were
 	# to get big, this process is used to synchronize unique key managment.
 
-	
+
 	def start_link(_) do
 		# {:ok, supervisor_pid}
 		IO.puts("Starting Message Cache.")
@@ -30,6 +30,13 @@ defmodule Socialnetwork.MessageBoardCache do
 			# The type of process the child is.
 			type: :supervisor
 		}
+	end
+
+	def get_board(id) do
+		case child_spec(id) do
+			{:ok, pid} -> pid
+			{:error, {:already_started, pid}} -> pid
+		end
 	end
 
 	# def get_messageboard(board_name) do
