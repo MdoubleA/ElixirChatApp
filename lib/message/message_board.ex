@@ -53,7 +53,8 @@ defmodule Socialnetwork.MessageServer do
 	alias Socialnetwork.Group, as: Group
 	alias Socialnetwork.MessageBoard, as: Board
 	alias Socialnetwork.MessageDatabase, as: Db
-	use GenServer
+	alias Socialnetwork.ProcessRegistry, as: ProcReg
+	use GenServer, restart: :temporary
 
 	# Call backs, called in the server process. ----------------
 	#
@@ -110,6 +111,24 @@ defmodule Socialnetwork.MessageServer do
 	# GenServer.start is a synchronious call and timesout after 5 seconds. A third parameter is in milliseconds to specify timeout.
 	def start({_id, %Group{}} = x), do: GenServer.start(MessageServer, x)  # returns {:ok, #PID<x.x.x>}
 	def start(id), do: GenServer.start(MessageServer, id)
+
+	def start_link({id, %Group{}} = x) do
+		IO.puts("Starting Message Server:")
+		IO.inspect(id)
+
+		GenServer.start_link(__MODULE__, x, name: via_tuple(id))
+	end
+
+	def start_link(id) do
+		IO.puts("Starting Message Server:")
+		IO.inspect(id)
+
+		GenServer.start_link(__MODULE__, id, name: via_tuple(id))
+	end
+
+	defp via_tuple(id) do
+		ProcReg.via_tuple({__MODULE__, id})
+	end
 
 	# Asynchornious calls.
 	def add_message(pid, username, message), do: GenServer.cast(pid, {:put, :message, {username, message}})
