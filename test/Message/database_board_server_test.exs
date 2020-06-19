@@ -3,26 +3,31 @@ defmodule DatabaseBoardServerIntegrationTest do
 	alias Socialnetwork.Group, as: Group
 	alias Socialnetwork.MessageServer, as: Server
 	alias Socialnetwork.MessageDatabase, as: Db
+	alias Socialnetwork.MessageBoardCache, as: Cache
 
 	test "Database Board Server Integration" do
 		{:ok, sys_super} = Socialnetwork.MessageBoard.System.start_link()
 		id = "CoolTalk"
 		test_group = Group.from_file!(".\\lib\\system\\SomePeople.txt")
-		{:ok, board_pid} = Server.start({id, test_group})
+		#{:ok, board_pid} = Server.start({id, test_group})
+		board_pid = Cache.get_board(id)
 		File.rm(".\\test\\persist\\Messages\\"<>id)
 
 		# Test initial state of database. No data saved yet.
 		assert nil == Db.get(id)
+		Server.add_member(board_pid, "Eliot", test_group)
+
+
 
 		# Test saving data to database.
-		:ok = Db.store(id, Server.get_board(board_pid))
-		assert Db.get(id) == Server.get_board(board_pid)
-
-		# Test saving altered database to disk.
-		old_board = Db.get(id)
-		:ok = Server.add_message(board_pid, "Eliot", "Hello!")
-		:ok = Db.store(id, Server.get_board(board_pid))
-		assert Db.get(id) != old_board
+		# :ok = Db.store(id, Server.get_board(board_pid))
+		# assert Db.get(id) == Server.get_board(board_pid)
+		#
+		# # Test saving altered database to disk.
+		# old_board = Db.get(id)
+		# :ok = Server.add_message(board_pid, "Eliot", "Hello!")
+		# :ok = Db.store(id, Server.get_board(board_pid))
+		# assert Db.get(id) != old_board
 		#
 		# # IO.inspect(old_board)
 		# # IO.puts("______________________________________")

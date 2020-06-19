@@ -59,9 +59,9 @@ defmodule Socialnetwork.MessageServer do
 	# Call backs, called in the server process. ----------------
 	#
 	# init/2 is not refactored yet!
-	def init({id, %Group{} = group}) do
-		{:ok, Board.new(id, group)}
-	 end
+	# def init({id, %Group{} = group}) do
+	# 	{:ok, Board.new(id, group)}
+	#  end
 
 	def init(id) do
 		new_board = case Db.get(id) do
@@ -109,15 +109,15 @@ defmodule Socialnetwork.MessageServer do
 	# Server Interfaces, called in client process. ----------------
 	#
 	# GenServer.start is a synchronious call and timesout after 5 seconds. A third parameter is in milliseconds to specify timeout.
-	def start({_id, %Group{}} = x), do: GenServer.start(MessageServer, x)  # returns {:ok, #PID<x.x.x>}
-	def start(id), do: GenServer.start(MessageServer, id)
+	# def start({_id, %Group{}} = x), do: GenServer.start(MessageServer, x)  # returns {:ok, #PID<x.x.x>}
+	# def start(id), do: GenServer.start(MessageServer, id)
 
-	def start_link({id, %Group{}} = x) do
-		IO.puts("Starting Message Server:")
-		IO.inspect(id)
-
-		GenServer.start_link(__MODULE__, x, name: via_tuple(id))
-	end
+	# def start_link({id, %Group{}} = x) do
+	# 	IO.puts("Starting Message Server:")
+	# 	IO.inspect(id)
+	#
+	# 	GenServer.start_link(__MODULE__, x, name: via_tuple(id))
+	# end
 
 	def start_link(id) do
 		IO.puts("Starting Message Server:")
