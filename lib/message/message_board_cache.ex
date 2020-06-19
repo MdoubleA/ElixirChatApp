@@ -5,19 +5,12 @@ defmodule Socialnetwork.MessageBoardCache do
 	# to get big, this process is used to synchronize unique key managment.
 
 
-	def start_link(_) do
+	def start_link() do
 		# {:ok, supervisor_pid}
 		IO.puts("Starting Message Cache.")
 		DynamicSupervisor.start_link(
 			name: __MODULE__,
 			strategy: :one_for_one
-		)
-	end
-
-	defp start_child(id) do
-		DynamicSupervisor.start_child(
-			__MODULE__,
-			{MessageServer, id}
 		)
 	end
 
@@ -32,15 +25,17 @@ defmodule Socialnetwork.MessageBoardCache do
 		}
 	end
 
+	defp start_child(id) do
+		DynamicSupervisor.start_child(
+			__MODULE__,
+			{MessageServer, id}
+		)
+	end
+
 	def get_board(id) do
-		case child_spec(id) do
+		case start_child(id) do
 			{:ok, pid} -> pid
 			{:error, {:already_started, pid}} -> pid
 		end
 	end
-
-	# def get_messageboard(board_name) do
-	# 	GenServer.call(__MODULE__, {:get, board_name})
-	# end
-
 end  # End Message Board Cache
