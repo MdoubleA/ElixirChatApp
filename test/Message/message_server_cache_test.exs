@@ -9,8 +9,8 @@ defmodule ServerCacheTest do
 	# A message board IS a server, but I separeted the board logic and server process
 	# logic into distinct modules, in the same file (message_board.ex).
 	test "Server Cache Test" do
-		id1 = "TedTalk"
-		id2 = "BobTalk"
+		id1 = "BobTalk"
+		id2 = "TedTalk"
 		# Both the following clean up lines are need post integration.
 		File.rm(".\\test\\persist\\Messages\\"<>id1)
 		File.rm(".\\test\\persist\\Messages\\"<>id2)
