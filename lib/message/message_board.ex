@@ -49,8 +49,6 @@ end # End MessageBoard
 # Welp, I tested the two together so the test needs to be rewritten.
 # Supervisor Ensures Db is created.
 defmodule Socialnetwork.MessageServer do
-	alias __MODULE__
-	alias Socialnetwork.Group, as: Group
 	alias Socialnetwork.MessageBoard, as: Board
 	alias Socialnetwork.MessageDatabase, as: Db
 	alias Socialnetwork.ProcessRegistry, as: ProcReg
@@ -108,7 +106,8 @@ defmodule Socialnetwork.MessageServer do
 
 	# Server Interfaces, called in client process. ----------------
 	#
-	# GenServer.start is a synchronious call and timesout after 5 seconds. A third parameter is in milliseconds to specify timeout.
+	# GenServer.start is a synchronious call and timesout after 5 seconds.
+	# A third parameter is in milliseconds to specify timeout.
 	# def start({_id, %Group{}} = x), do: GenServer.start(MessageServer, x)  # returns {:ok, #PID<x.x.x>}
 	# def start(id), do: GenServer.start(MessageServer, id)
 
@@ -120,8 +119,8 @@ defmodule Socialnetwork.MessageServer do
 	# end
 
 	def start_link(id) do
-		IO.puts("Starting Message Server:")
-		IO.inspect(id)
+		# IO.puts("Starting Message Server:")
+		# IO.inspect(id)
 
 		GenServer.start_link(__MODULE__, id, name: via_tuple(id))
 	end

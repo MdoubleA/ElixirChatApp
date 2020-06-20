@@ -7,7 +7,7 @@ defmodule Socialnetwork.MessageBoardCache do
 
 	def start_link() do
 		# {:ok, supervisor_pid}
-		IO.puts("Starting Message Cache.")
+		# IO.puts("Starting Message Cache.")
 		DynamicSupervisor.start_link(
 			name: __MODULE__,
 			strategy: :one_for_one

@@ -61,6 +61,7 @@ defmodule Socialnetwork.Group do
 	end
 
 	# Tested visually during development.
+	# Allows use of Enum library.
 	defimpl Enumerable, for: Group do
 		def reduce(_group, {:halt, acc}, _fun), do: {:halted, acc}
 		def reduce(group, {:suspend, acc}, fun), do: {:suspended, acc, &reduce(group, &1, fun)}
