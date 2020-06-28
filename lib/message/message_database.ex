@@ -2,17 +2,24 @@ defmodule Socialnetwork.MessageDatabase do
 	@db_folder ".\\test\\persist\\Messages"
 	@pool_size 3
 	alias Socialnetwork.MessageDatabase.Worker, as: Worker
+	use Supervisor
 
 	# Interface, these are called in the client process.
-	def start_link do
+	def start_link() do
 		File.mkdir_p!(@db_folder)
 		children = Enum.map(1..@pool_size, &worker_spec/1)
-		Supervisor.start_link(children, strategy: :one_for_one)
+		Supervisor.start_link(__MODULE__, children, name: __MODULE__)
+		#Supervisor.start_link(children, strategy: :one_for_one, )
 	end
 
 	defp worker_spec(worker_id) do
 		default_worker_spec = {Worker, {@db_folder, worker_id}}
 		Supervisor.child_spec(default_worker_spec, id: worker_id)
+	end
+
+	@impl true
+	def init(children) do
+	  Supervisor.init(children, strategy: :one_for_one)
 	end
 
 	def child_spec(_) do
