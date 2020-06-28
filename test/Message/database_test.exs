@@ -6,7 +6,7 @@ defmodule DatabaseTest do
 
 
 	test "Database Test" do
-		{:ok, sys_super} = Socialnetwork.MessageBoard.System.start_link()
+		#{:ok, sys_super} = Socialnetwork.MessageBoard.System.start_link()
 		id = "CoolTalk"
 		File.rm(".\\test\\persist\\Messages\\"<>id)
 		test_group = Group.from_file!(".\\lib\\system\\SomePeople.txt")
@@ -28,7 +28,7 @@ defmodule DatabaseTest do
 
 		# Give any child process in the system sometime to clean.
 		Process.sleep(500)
-		Process.exit(sys_super, :normal)
-		Process.sleep(500)
+		#Process.exit(sys_super, :normal)
+		#Process.sleep(500)
 	end # End test
 end # End Database Test

@@ -98,10 +98,13 @@ defmodule Socialnetwork.UserRepository do
 				field = data.field
 				value = data.value
 				temp_group = Group.update_member(group, uniquename, field, value)
-				if Kernel.match?(temp_group, group) do
+				# Frist variable of match is a pattern. So use '^' in front of variable to reference the
+				# pattern it references.
+				if Kernel.match?(^temp_group, group) do
 					group
 				else
 					Socialnetwork.UserDatabase.store(temp_group.group_name, temp_group)
+					temp_group
 				end
 		end
 

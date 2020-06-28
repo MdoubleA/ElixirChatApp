@@ -17,7 +17,7 @@ defmodule ServerCacheTest do
 		test_group = Group.from_file!(".\\lib\\system\\SomePeople.txt")
 
 		# Test distinct process creation.
-		{:ok, sys_super} = Socialnetwork.MessageBoard.System.start_link()
+		#{:ok, sys_super} = Socialnetwork.MessageBoard.System.start_link()
 		pid1 = Cache.get_board(id1)
 		pid2 = Cache.get_board(id2)
 		assert Kernel.is_pid(pid1)
@@ -59,7 +59,7 @@ defmodule ServerCacheTest do
 		assert not Process.alive?(pid1)
 		assert not Process.alive?(pid2)
 
-		Process.exit(sys_super, :normal)
+		#Process.exit(sys_super, :normal)
 		Process.sleep(500)
 	end # End test
 end # End TestMessageServer

@@ -11,7 +11,8 @@ defmodule Socialnetwork.MessageBoard.System do
 				Db,
 				Cache
 			],
-			strategy: :one_for_one
+			strategy: :one_for_one,
+			name: __MODULE__
 		)
 	end # End start_link
 end # End MessageBoard.System
