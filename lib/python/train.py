@@ -1,5 +1,6 @@
 # Copyright (c) 2019-present, HuggingFace Inc.
 # All rights reserved. This source code is licensed under the BSD-style license found in the LICENSE file in the root directory of this source tree.
+# Source repository: https://github.com/huggingface/transfer-learning-conv-ai
 import os
 import math
 import logging

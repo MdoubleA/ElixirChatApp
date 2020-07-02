@@ -1,3 +1,8 @@
+# # Copyright (c) 2019-present, HuggingFace Inc.
+# All rights reserved.
+# This source code is licensed under the BSD-style license found in the
+# LICENSE file in the root directory of this source tree.
+# Source repository: https://github.com/huggingface/transfer-learning-conv-ai
 import torch
 from train import SPECIAL_TOKENS, build_input_from_segments, add_special_tokens_
 import torch.nn.functional as F
@@ -78,7 +83,7 @@ def sample_sequence(personality, history, tokenizer, model, device, temperature,
 
     return current_output
 
-
+# -- The following code are my modifications, wrappers, and additions for this project-------
 # Set hyperparameters
 no_sample = True  # Set to use greedy decoding instead of sampling
 max_out_utter = 20  # Maximum length of the output utterances
@@ -147,24 +152,3 @@ def test_respond():
     for i in range(len(convo)):
         response, history = respond(persona, history, convo[i])
         print(response, history)
-
-
-def interactive():
-    persona = ["i like to remodel homes .", "i like to go hunting .", "i like to shoot a bow .",
-               "my favorite holiday is halloween ."]
-    personality = mk_personality(persona)
-    history = []
-    while True:
-        raw_text = input(">>> ")
-        while not raw_text:
-            print('Prompt should not be empty!')
-            raw_text = input(">>> ")
-        history.append(tokenizer.encode(raw_text))
-        with torch.no_grad():
-            out_ids = sample_sequence(personality, history, tokenizer, model, host_device, temperature, top_k, top_p,
-                                      no_sample,
-                                      max_out_utter, min_out_utter)
-        history.append(out_ids)
-        history = history[-(2 * max_history + 1):]
-        out_text = tokenizer.decode(out_ids, skip_special_tokens=True)
-        print(out_text)
