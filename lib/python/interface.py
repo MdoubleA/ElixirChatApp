@@ -13,6 +13,7 @@ from os import path
 import tarfile
 
 
+# Constant from Hugging Faces' source code.
 HF_FINETUNED_MODEL = "https://s3.amazonaws.com/models.huggingface.co/transfer-learning-chatbot/gpt_personachat_cache.tar.gz"
 
 

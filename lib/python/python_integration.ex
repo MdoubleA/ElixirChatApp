@@ -18,6 +18,7 @@ defmodule PythonIntegration do
 
 	def test_python_integration do
 		# Paths need to be character strings apparently.
+		# For these tests to work will need adjust venv path.
 		py_env = '.\\lib\\python\\venv\\Scripts\\python.exe'
 		py_src = '.\\lib\\python'
 		persona = [
