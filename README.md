@@ -1,4 +1,4 @@
-# Socialnetwork
+# ChatApp
 
 Exploring Elixir, Machine Learning, and their integration by building a messaging app.
 
