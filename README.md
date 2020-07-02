@@ -24,5 +24,7 @@ be found at [https://hexdocs.pm/socialnetwork](https://hexdocs.pm/socialnetwork)
 #### Python
 
 See requirements.txt for package information.
+
 Python version: 3.8.0
+
 Pip version (used for package installation): 20.1.1
