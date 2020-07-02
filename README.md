@@ -44,4 +44,4 @@ Source repository for Hugging Faces' code is here: https://github.com/huggingfac
 
 #### Machine
 
-64 bit Windows.
+64-bit Windows.
