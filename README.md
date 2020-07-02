@@ -1,6 +1,6 @@
 # Socialnetwork
 
-Learning Elixir, Phoenix, and their integration with other tools by building things.
+Exploring Elixir, Machine Learning, and their integration by building a messaging app.
 
 ## Installation
 
