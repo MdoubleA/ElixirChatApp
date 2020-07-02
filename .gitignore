@@ -26,4 +26,4 @@ socialnetwork-*.tar
 /lib/python/venv/
 
 # The language model trained for conversation.
-/lib/python/tmpa0_h0vzt/
+/lib/python/trained_model/

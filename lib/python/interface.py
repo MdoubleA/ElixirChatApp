@@ -7,8 +7,13 @@ import torch
 from train import SPECIAL_TOKENS, build_input_from_segments, add_special_tokens_
 import torch.nn.functional as F
 import warnings
-from transformers import OpenAIGPTLMHeadModel, OpenAIGPTTokenizer
+from transformers import OpenAIGPTLMHeadModel, OpenAIGPTTokenizer, cached_path
 import random
+from os import path
+import tarfile
+
+
+HF_FINETUNED_MODEL = "https://s3.amazonaws.com/models.huggingface.co/transfer-learning-chatbot/gpt_personachat_cache.tar.gz"
 
 
 def top_filtering(logits, top_k=0., top_p=0.9, threshold=-float('Inf'), filter_value=-float('Inf')):
@@ -84,6 +89,23 @@ def sample_sequence(personality, history, tokenizer, model, device, temperature,
     return current_output
 
 # -- The following code are my modifications, wrappers, and additions for this project-------
+
+# Modifies Hugging Faces download_pretrained_model() that's found in utils.py.
+# Is renamed and uses a permanent directory rather than a temporary one.
+def get_pretrained_model():
+	model_path = ".\\lib\\python\\trained_model"
+
+	if not path.exists(model_path):
+	    """ Download and extract finetuned model from S3 """
+	    resolved_archive_file = cached_path(HF_FINETUNED_MODEL)
+
+	    #logger.info("extracting archive file {} to temp dir {}".format(resolved_archive_file, tempdir))
+	    with tarfile.open(resolved_archive_file, 'r:gz') as archive:
+	        archive.extractall(model_path)
+
+	return model_path
+
+
 # Set hyperparameters
 no_sample = True  # Set to use greedy decoding instead of sampling
 max_out_utter = 20  # Maximum length of the output utterances
@@ -102,7 +124,7 @@ if seed != 0:  # why is this here?
     torch.cuda.manual_seed(seed)
 
 #model_checkpoint = ".\\tmpa0_h0vzt"
-model_checkpoint = ".\\lib\\python\\tmpa0_h0vzt"
+model_checkpoint = get_pretrained_model()
 host_device = "cpu"
 # host_device = "cuda" if torch.cuda.is_available() else "cpu"
 tokenizer_class, model_class = (OpenAIGPTTokenizer, OpenAIGPTLMHeadModel)
