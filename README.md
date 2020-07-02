@@ -4,6 +4,15 @@ Learning Elixir, Phoenix, and their integration with other tools by building thi
 
 ## Installation
 
+Run/do the following after repository, python, and elixir download from project root.
+<ol>
+<li>mix deps.get</li>
+<li>pip install -r requirements.txt</li>
+<li>activate virtual environment</li>
+<li>iex -S mix</li>
+</ol>
+
+
 #### Elixir
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed

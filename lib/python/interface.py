@@ -90,6 +90,7 @@ def sample_sequence(personality, history, tokenizer, model, device, temperature,
     return current_output
 
 # -- The following code are my modifications, wrappers, and additions for this project-------
+# ------------------------------------------------------------------------------
 
 # Modifies Hugging Faces download_pretrained_model() that's found in utils.py.
 # Is renamed and uses a permanent directory rather than a temporary one.
