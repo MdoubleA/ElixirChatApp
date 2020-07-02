@@ -1,6 +1,6 @@
 # Socialnetwork
 
-**TODO: Add description**
+Learning Elixir, Phoenix, and their integration with other tools by building things. 
 
 ## Installation
 
