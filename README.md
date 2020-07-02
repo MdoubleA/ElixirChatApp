@@ -1,6 +1,6 @@
 # ChatApp
 
-Exploring Elixir, Machine Learning, and their integration by building a messaging app.
+Exploring Elixir, Machine Learning, and their integration by building a chat app, of sorts.
 
 ## Installation
 
