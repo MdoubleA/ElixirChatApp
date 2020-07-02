@@ -34,10 +34,14 @@ be found at [https://hexdocs.pm/socialnetwork](https://hexdocs.pm/socialnetwork)
 
 See requirements.txt for package information.
 
-Python version: 3.8.0
+Python version: 3.8.0.
 
-Pip version (used for package installation): 20.1.1
+Pip version (used for package installation): 20.1.1.
 
 This code wraps and alters a competitive conversational A.I. implementation created my Hugging Face.<br/>
 Wrappers, additions, and modifications are duly noted in the code.<br/>
 Source repository for Hugging Faces' code is here: https://github.com/huggingface/transfer-learning-conv-ai
+
+#### Machine
+
+64 bit Windows.
