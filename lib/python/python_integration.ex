@@ -1,4 +1,4 @@
-defmodule PythonIntegration do
+defmodule PythonIntegrationTest do
 	@moduledoc """
 	Documentation for `PythonIntegraton`.
 	"""
