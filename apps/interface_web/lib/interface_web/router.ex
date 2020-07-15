@@ -2,13 +2,14 @@ defmodule InterfaceWeb.Router do
   use InterfaceWeb, :router
 
   pipeline :api do
+	plug CORSPlug, origin: "http://localhost:3000"
     plug :accepts, ["json"]
   end
 
   scope "/api", InterfaceWeb do
     pipe_through :api
 
-	resources "/profiles", ProfileController, except: [:new, :edit]
+	resources "/pantheon", ProfileController, except: [:new, :edit]
   end
 
   # Enables LiveDashboard only for development
