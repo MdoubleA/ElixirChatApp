@@ -1,6 +1,6 @@
 # ChatApp
 
-Exploring Elixir, NLP, and software integration with Elixir Phoenix Framework, HuggingFace Transformers and ReactJS.
+Exploring Elixir, NLP, and software integration with Elixir Phoenix Framework, HuggingFace Transformers, and ReactJS.
 
 ## Installation
 
