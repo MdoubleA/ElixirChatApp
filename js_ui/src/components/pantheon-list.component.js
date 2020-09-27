@@ -37,7 +37,7 @@ export default class PantheonList extends Component {
     render() {
         return (
             <div>
-                <p>Welcome to a list of all messages!!!...I think...fingers crossed!</p>
+                <p>Meet the Pantheon</p>
 				<br/>
 				<table className="table table-striped" style={{ marginTop: 20 }} >
 					<thead>
