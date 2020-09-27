@@ -1,17 +1,23 @@
 # ChatApp
 
-Exploring Elixir, Machine Learning, and their integration by building a chat app, of sorts.
+Exploring Elixir, NLP, and software integration with Elixir Phoenix Framework, HuggingFace Transformers and ReactJS.
 
 ## Installation
 
-Run/do the following after repository, python, and elixir download from project root.
+Run the following after cloning the repository and installing Elixir.
 <ol>
+<li>py -m venv env</li>
+<li>.\apps\socialnetwork\python\venv\Scripts\activate</li>
 <li>mix deps.get</li>
 <li>pip install -r requirements.txt</li>
-<li>activate virtual environment</li>
-<li>iex -S mix</li>
 </ol>
 
+## Run
+<ol>
+<li>From top directory run: .\apps\socialnetwork\python\venv\Scripts\activate</li>
+<li>From top directory run: mix phx.server</li>
+<li>From js_ui run: npm start</li>
+</ol>
 
 #### Elixir
 
@@ -36,7 +42,7 @@ See requirements.txt for package information.
 
 Python version: 3.8.0.
 
-Pip version used for package installation: 20.1.1.
+Pip version: 20.1.1.
 
 This code wraps and alters a competitive conversational A.I. implementation created my Hugging Face.<br/>
 Wrappers, additions, and modifications are duly noted in the code.<br/>
