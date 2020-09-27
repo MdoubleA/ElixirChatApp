@@ -10,7 +10,7 @@ function App() {
   return (
 	  <Router>
 	    <div className="App">
-			<h2>A Title!</h2>
+			<h2>The Cancerians</h2>
 
 			<nav className="navbar navbar-expand-lg navbar-light bg-light">
               <a className="navbar-brand" href="https://codingthesmartway.com" target="_blank">
@@ -20,14 +20,13 @@ function App() {
               <div className="collpase navbar-collapse">
                 <ul className="navbar-nav mr-auto">
                   <li className="navbar-item">
-                    <Link to="/list" className="nav-link">AllApps</Link>
+                    <Link to="/list" className="nav-link">All Members</Link>
                   </li>
                 </ul>
               </div>
             </nav>
             <br/>
 
-			{/*What does exact do*/}
 			<Route path="/" exact component={Home} />
 			<Route path="/list" component={PantheonList} />
 			{/*<Route path="/edit/:id" component={EditTodo} />*/}
